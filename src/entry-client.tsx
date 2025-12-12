@@ -7,8 +7,7 @@ import "./index.css";
 
 const queryClient = createQueryClient();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const dehydratedState = (window as any).__REACT_QUERY_STATE__;
+const dehydratedState = window.__REACT_QUERY_STATE__;
 
 const container = document.getElementById("root") as HTMLElement;
 

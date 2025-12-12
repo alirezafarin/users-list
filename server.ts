@@ -1,4 +1,3 @@
-console.log("!!! SERVER WITH TAG REPLACEMENT !!!");
 import fs from "node:fs/promises";
 import express from "express";
 import compression from "compression";

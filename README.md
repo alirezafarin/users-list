@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# SSR React User Directory
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A production-ready Server-Side Rendered (SSR) application built from scratch using **React**, **Vite**, and **Express**.
 
-Currently, two official plugins are available:
+This project demonstrates a manual SSR implementation without meta-frameworks (like Next.js), featuring isomorphic data fetching, hydration, and a scalable feature-based architecture.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- **Custom SSR Engine:** Manual Express server with Vite middleware for development and optimized static serving for production.
+- **Isomorphic Data Fetching:** Data is prefetched on the server and dehydrated to the client using **TanStack Query v5**.
+- **Clean Architecture:** Feature-based folder structure separating domain logic (`features/`) from presentation (`pages/`).
+- **Performance Optimization:**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+  - Full server-side hydration (no "loading" flickers on initial load).
 
-## Expanding the ESLint configuration
+  - Debounced search functionality.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Mobile-First UI:** Responsive design using Tailwind CSS with optimized touch zones.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠 Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Runtime:** Node.js, Express
+- **Frontend:** React 19, TypeScript
+- **Build Tool:** Vite (SSR Mode)
+- **State Management:** TanStack Query (React Query)
+- **Styling:** Tailwind CSS
+
+---
+
+## 📦 Installation & Setup
+
+**Prerequisites:** Node.js (v18+ recommended) and `pnpm`.
+
+1.  **Install Dependencies**
+
+    ```bash
+    pnpm install
+    ```
+
+2.  **Environment Setup**
+    Create a `.env` file in the root directory:
+    ```env
+    VITE_API_URL=[https://jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com)
+    PORT=5173
+    ```
+
+---
+
+## 🏃‍♂️ How to Run
+
+### **Development Mode**
+
+Runs the Express server with Vite as middleware. Supports HMR (Hot Module Replacement).
+
+```bash
+pnpm serve
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🏗 Architecture Overview
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This project follows a **Page-Module & Feature-Based** architecture to ensure scalability and separation of concerns.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### **1. Entry Points**
+
+- **`entry-client.tsx`**: The browser entry point. It hydrates the React app into the DOM using `hydrateRoot` and restores the React Query state from `window.__REACT_QUERY_STATE__`.
+- **`entry-server.tsx`**: The server entry point. It handles server-side routing, matches the URL against a declarative route config, prefetches necessary data, and renders the app to an HTML string.
+
+### **2. Server Logic (`server.ts`)**
+
+Instead of a standard SPA fallback, the Express server intercepts all requests:
+
+1.  **Match**: It determines if the request corresponds to a valid route.
+2.  **Render**: It calls the `render()` function from `entry-server.tsx`, which returns the App HTML and the Dehydrated State.
+3.  **Inject**: It dynamically replaces placeholders in `index.html` (`<div id="root">` and `</body>`) to inject the content and state script before sending the response to the browser.
+
+### **3. Folder Structure Strategy**
+
+- **`src/features/`**: Contains domain-specific logic (e.g., `Users`). This layer handles API calls, type definitions, and business logic. It is UI-agnostic.
+- **`src/pages/`**: Contains the orchestration logic. Each page is a self-contained **Module** containing its own components, skeletons, and error states.
+- **`src/components/`**: Shared "dumb" UI components (e.g., `Card`, `SearchBar`) that are reusable across the application.

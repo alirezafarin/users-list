@@ -42,8 +42,7 @@ This project demonstrates a manual SSR implementation without meta-frameworks (l
 2.  **Environment Setup**
     Create a `.env` file in the root directory:
     ```env
-    VITE_API_URL=[https://jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com)
-    PORT=5173
+    VITE_API_URL=https://jsonplaceholder.typicode.com
     ```
 
 ---

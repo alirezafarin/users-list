@@ -1,7 +1,6 @@
 import { PageLayout } from "@components";
-import { ApiKeys, UserService } from "@features";
-import { useQuery } from "@tanstack/react-query";
-import { useParams, Link } from "react-router-dom";
+import { AppRoutes } from "@constants";
+import { Link } from "react-router-dom";
 import {
   DetailsBadge,
   DetailsError,
@@ -9,20 +8,10 @@ import {
   DetailsLoading,
   DetailsSection,
 } from "./components";
-import { AppRoutes } from "@constants";
+import { useFetchUserDetails } from "./hooks";
 
 export default function UserDetails() {
-  const { id } = useParams<{ id: string }>();
-
-  const {
-    data: user,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: [ApiKeys.USER, id],
-    queryFn: () => UserService.getById(id!),
-    enabled: !!id,
-  });
+  const { data: user, isLoading, isError } = useFetchUserDetails();
 
   if (isLoading) return <DetailsLoading />;
 

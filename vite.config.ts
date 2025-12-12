@@ -11,6 +11,7 @@ export default defineConfig({
       "@features": path.resolve(process.cwd(), "src/features"),
       "@api": path.resolve(process.cwd(), "src/api"),
       "@constants": path.resolve(process.cwd(), "src/constants"),
+      "@hooks": path.resolve(process.cwd(), "src/hooks"),
     },
   },
 });

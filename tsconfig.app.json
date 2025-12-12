@@ -28,7 +28,8 @@
       "@components": ["./src/components"],
       "@features": ["./src/features"],
       "@api": ["./src/api"],
-      "@constants": ["./src/constants"]
+      "@constants": ["./src/constants"],
+      "@hooks": ["./src/hooks"]
     }
   },
   "include": ["src"]

@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
@@ -12,10 +11,6 @@ const queryClient = createQueryClient();
 const dehydratedState = (window as any).__REACT_QUERY_STATE__;
 
 const container = document.getElementById("root") as HTMLElement;
-
-// ⚠️ DEBUGGING ONLY: Clear server HTML before mounting
-// If this fixes the duplication, your Server HTML structure is wrong.
-container.innerHTML = "";
 
 ReactDOM.hydrateRoot(
   container,

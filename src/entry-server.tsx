@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { AppRouter } from "./Router";
 import { createQueryClient } from "./queryClient";
-import { fetchUsers, fetchUserById } from "./api";
+import { ApiKeys, UserService } from "@features";
 
 export async function render(url: string) {
   const queryClient = createQueryClient();
@@ -16,21 +16,19 @@ export async function render(url: string) {
   const cleanPath =
     path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
 
-  console.log(`Server: Request for ${cleanPath}`);
-
   if (cleanPath === "/") {
     console.log("Server: Prefetching users list...");
     await queryClient.prefetchQuery({
-      queryKey: ["users"],
-      queryFn: fetchUsers,
+      queryKey: [ApiKeys.USERS],
+      queryFn: UserService.getAll,
     });
   } else {
     const match = cleanPath.match(/^\/user\/(\d+)$/);
     if (match) {
       console.log(`Server: Prefetching user ${match[1]}...`);
       await queryClient.prefetchQuery({
-        queryKey: ["user", match[1]],
-        queryFn: () => fetchUserById(match[1]),
+        queryKey: [ApiKeys.USER, match[1]],
+        queryFn: () => UserService.getById(match[1]),
       });
     }
   }
